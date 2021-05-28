@@ -1,0 +1,18 @@
+Package: shiny.server.app
+Title: Basic demo of shiny app deployment
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Camille",
+           family = "Bonamy",
+           role = c("aut", "cre"),
+           email = "example@gmail.com")
+Description: This package features several ways to deploy a
+    shiny app.
+License: MIT + file LICENSE
+Imports: 
+    datasets,
+    shiny
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

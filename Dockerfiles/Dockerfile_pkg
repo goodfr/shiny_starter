@@ -1,0 +1,34 @@
+FROM rocker/shiny:4.0.5
+
+RUN R -e 'install.packages("remotes")'
+# RUN R -e 'remotes::install_github("r-lib/remotes", ref = "6c8fdaa")'
+RUN R -e 'remotes::install_cran("shiny", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("devtools", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("cli", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("memoise", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("pkgbuild", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("callr", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("processx", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("ps", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("prettyunits", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("pkgload", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("desc", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("rprojroot", dependencies = TRUE)'
+
+# Copy what is needed for the package build
+COPY DESCRIPTION .
+COPY R/pkg_app.R R/pkg_app.R
+
+# to do :
+#	- copier le nécessaire en app
+#	- utiliser workdir app pour builder avec un contexte
+#	- reinitialiser workdir sur . et faire le launch
+
+# Build package
+RUN R -e 'devtools::build()'
+COPY shiny.server.app_*.tar.gz /app.tar.gz
+RUN remotes::install_local('/app.tar.gz')
+
+EXPOSE 3838
+
+ENTRYPOINT ["R", "-e", "shiny.server.app::pkg_app()"]

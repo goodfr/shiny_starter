@@ -1,0 +1,41 @@
+FROM rocker/r-base
+
+RUN R -e 'install.packages("remotes")'
+RUN R -e 'remotes::install_github("r-lib/remotes", ref = "6c8fdaa")'
+
+RUN R -e 'remotes::install_cran("httpuv")'
+RUN R -e 'remotes::install_cran("mime")'
+RUN R -e 'remotes::install_cran("jsonlite")'
+RUN R -e 'remotes::install_cran("xtable")'
+RUN R -e 'remotes::install_cran("digest")'
+RUN R -e 'remotes::install_cran("htmltools")'
+RUN R -e 'remotes::install_cran("R6")'
+RUN R -e 'remotes::install_cran("sourcetools")'
+RUN R -e 'remotes::install_cran("later")'
+RUN R -e 'remotes::install_cran("promises")'
+RUN R -e 'remotes::install_cran("crayon")'
+RUN R -e 'remotes::install_cran(rla"ng)'
+RUN R -e 'remotes::install_cran("fastmap")'
+RUN R -e 'remotes::install_cran("withr")'
+RUN R -e 'remotes::install_cran("commonmark")'
+RUN R -e 'remotes::install_cran("glue")'
+RUN R -e 'remotes::install_cran("bslib")'
+RUN R -e 'remotes::install_cran("cachem")'
+RUN R -e 'remotes::install_cran("ellipsis")'
+RUN R -e 'remotes::install_cran("lifecycle")'
+
+RUN R -e 'remotes::install_cran("shiny", dependencies = TRUE)'
+RUN R -e 'remotes::install_cran("devtools")'
+
+# Copy what is needed for the package build
+COPY DESCRIPTION .
+COPY R/pkg_app.R R/pkg_app.R
+
+# Build package
+RUN R -e 'devtools::build(pkg = ".", path = ".")'
+COPY shiny.server.app_*.tar.gz /app.tar.gz
+RUN remotes::install_local('/app.tar.gz')
+
+EXPOSE 3838
+
+ENTRYPOINT ["R", "-e", "shiny.server.app::pkg_app()"]

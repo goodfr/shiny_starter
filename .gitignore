@@ -4,3 +4,5 @@
 .Ruserdata
 *.Rproj
 *.code-workspace
+dev.R
+.Rbuildignore
