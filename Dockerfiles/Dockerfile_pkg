@@ -25,7 +25,7 @@ COPY R/pkg_app.R R/pkg_app.R
 #	- reinitialiser workdir sur . et faire le launch
 
 # Build package
-RUN R -e 'devtools::build()'
+RUN R -e 'devtools::build(pkg = ".", path = ".")'
 COPY shiny.server.app_*.tar.gz /app.tar.gz
 RUN remotes::install_local('/app.tar.gz')
 
