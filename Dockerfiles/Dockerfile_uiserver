@@ -1,8 +1,8 @@
-from rocker/shiny:4.0.5
+FROM rocker/shiny:4.0.5
 
-copy R/ui.R app/ui.R
-copy R/server.R app/server.R
+COPY R/ui.R app/ui.R
+COPY R/server.R app/server.R
 
-expose 3838
+EXPOSE 3838
 
-entrypoint ["R", "-e", "shiny::runApp('app', host = '0.0.0.0', port = 3838)"]
+ENTRYPOINT ["R", "-e", "shiny::runApp('app', host = '0.0.0.0', port = 3838)"]

@@ -9,7 +9,7 @@ Explore some ways to deploy shiny apps.
 
 One can test this project using one the following method :
 
-- Clone the repository and using docker commands
+- Clone the repository and use docker commands
 
 <!-- -->
 

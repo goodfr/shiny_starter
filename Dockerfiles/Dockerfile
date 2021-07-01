@@ -1,7 +1,7 @@
-from rocker/shiny:4.0.4
+FROM rocker/shiny:4.0.4
 
-copy R/app.R app/app.R
+COPY R/app.R app/app.R
 
-expose 3838
+EXPOSE 3838
 
-CMD ["R", "-e shiny::runApp('app')"]
+ENTRYPOINT ["R", "-e shiny::runApp('app')"]
