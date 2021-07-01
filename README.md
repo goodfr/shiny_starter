@@ -9,14 +9,14 @@ Explore some ways to deploy shiny apps.
 
 One can test this project using one the following method :
 
--   Clone the repository and using docker commands
+- Clone the repository and using docker commands
 
 <!-- -->
 
     docker build -t shiny_test:v1 --file Dockerfiles/Dockerfile .
     docker run --name shiny_test -p 3838:3838 shiny_test:v1
 
--   (To do) Pull the image from docker hub then run it
+- (To do) Pull the image from docker hub then run it
 
 <!-- -->
 
@@ -25,6 +25,13 @@ One can test this project using one the following method :
     docker run --name shiny_test -p 3838:3838 <name_of_the_repository>/shiny_test:v1
 
 Done so far and working with docker :
-  * mono app ok
-  * multi file app ok
-  * app as a package ?
+
+- mono app ok
+- multi file app ok
+- app as a package ok
+
+To serve app on diverse port (here e.g 1234) use :
+
+```
+docker run -d -p 1234:3838 --rm --name shiny_test shiny_pkg:1.2
+```

@@ -1,7 +1,6 @@
 FROM rocker/shiny:4.0.5
 
 RUN R -e 'install.packages("remotes")'
-# RUN R -e 'remotes::install_github("r-lib/remotes", ref = "6c8fdaa")'
 RUN R -e 'remotes::install_cran("shiny", dependencies = TRUE)'
 RUN R -e 'remotes::install_cran("devtools", dependencies = TRUE)'
 RUN R -e 'remotes::install_cran("cli", dependencies = TRUE)'
@@ -16,19 +15,16 @@ RUN R -e 'remotes::install_cran("desc", dependencies = TRUE)'
 RUN R -e 'remotes::install_cran("rprojroot", dependencies = TRUE)'
 
 # Copy what is needed for the package build
-COPY DESCRIPTION .
-COPY R/pkg_app.R R/pkg_app.R
-
-# to do :
-#	- copier le nécessaire en app
-#	- utiliser workdir app pour builder avec un contexte
-#	- reinitialiser workdir sur . et faire le launch
+COPY DESCRIPTION r_pkg/
+COPY R/pkg_app.R r_pkg/R/pkg_app.R
 
 # Build package
+WORKDIR /r_pkg
 RUN R -e 'devtools::build(pkg = ".", path = ".")'
-COPY shiny.server.app_*.tar.gz /app.tar.gz
-RUN remotes::install_local('/app.tar.gz')
+RUN cp shiny.server.app_*.tar.gz app.tar.gz
+RUN R -e 'remotes::install_local("app.tar.gz")'
 
+RUN rm shiny.server.app_*.tar.gz
 EXPOSE 3838
 
 ENTRYPOINT ["R", "-e", "shiny.server.app::pkg_app()"]
